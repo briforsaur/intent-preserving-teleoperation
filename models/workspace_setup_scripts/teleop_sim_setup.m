@@ -30,3 +30,6 @@ T_min = 0.01;
 T = 0.01;
 d_T = round(T/Ts); % Communication delay 
 T_max = 0.5;
+% Tolerances
+v_tol = 0.001; % [m/s]
+theta_tol = deg2rad(0.1); % [rad]
