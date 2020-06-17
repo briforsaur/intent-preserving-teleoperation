@@ -19,23 +19,18 @@ save(strcat(output_dir, data_dir, datestr(now,30), "_", model_name),...
      '-regexp', '^(?!(model_dir|output_data_dir|start_dir|tout)$).');
 
 function update_model_workspace(model_name, script_path)
-    save_flag = false;
     if ~bdIsLoaded(model_name)
         load_system(model_name);
     end
     mdlWorkspace = get_param(model_name,'ModelWorkspace');
     if ~strcmp(mdlWorkspace.DataSource, 'MATLAB File')
         mdlWorkspace.DataSource = 'MATLAB File';
-        save_flag = true;
     end
     if ~strcmp(mdlWorkspace.FileName, script_path)
         mdlWorkspace.FileName = script_path;
-        save_flag = true;
-    end
-    if save_flag
-        save_system(model_name);
     end
     reload(mdlWorkspace);
+    save_system(model_name);
 end
 
 function mdlWorkspaceVars = get_model_workspace(model_name)
