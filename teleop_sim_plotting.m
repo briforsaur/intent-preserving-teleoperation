@@ -1,6 +1,10 @@
 % teleop_sim_plotting.m
 
 close all;
+clear;
+data_dir = "E:/Users/shfor/OneDrive - Queen's University/sim_data_and_outputs/intent_preserving_teleop/output_data/";
+data_file = "20200617T105638_teleop_sim_angle";
+load(strcat(data_dir, data_file));
 
 error_pos = position_patient - position_desired;
 error_vel = velocity_patient - velocity_desired;
