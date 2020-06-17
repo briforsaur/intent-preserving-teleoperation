@@ -2,70 +2,76 @@
 
 close all;
 
-t = position_patient.time;
-true_tracking_error = [position_patient.signals.values - position_desired.signals.values,...
-    velocity_patient.signals.values - velocity_desired.signals.values];
-true_tracking_error_mag = sqrt(sum(true_tracking_error.^2,2));
+error_pos = position_patient - position_desired;
+error_vel = velocity_patient - velocity_desired;
+true_tracking_error = timeseries([error_pos.Data, error_vel.Data],...
+                                 error_pos.Time);
+true_tracking_error_mag = calc_timeseries_magnitude(true_tracking_error);
 
 figure;
 subplot(3,2,1);
-plot(position_patient.time, position_patient.signals.values(:,1),...
-     position_desired.time, position_desired.signals.values(:,1));
+plot(position_patient.Time, position_patient.Data(:,1),...
+     position_desired.Time, position_desired.Data(:,1));
 xlabel('Time [s]');
 ylabel('Hand position [m]');
 legend('Actual','Desired');
 title('X-Direction');
 subplot(3,2,2);
-plot(position_patient.time, position_patient.signals.values(:,2),...
-     position_desired.time, position_desired.signals.values(:,2));
+plot(position_patient.Time, position_patient.Data(:,2),...
+     position_desired.Time, position_desired.Data(:,2));
 xlabel('Time [s]');
 ylabel('Hand position [m]');
 legend('Actual','Desired');
 title('Y-Direction');
 subplot(3,2,3);
-plot(velocity_patient.time,velocity_patient.signals.values(:,1),...
-     velocity_desired.time,velocity_desired.signals.values(:,1));
+plot(velocity_patient.Time,velocity_patient.Data(:,1),...
+     velocity_desired.Time,velocity_desired.Data(:,1));
 xlabel('Time [s]');
 ylabel('Hand velocity [m/s]');
 legend('Actual','Desired');
 subplot(3,2,4);
-plot(velocity_patient.time,velocity_patient.signals.values(:,2),...
-     velocity_desired.time,velocity_desired.signals.values(:,2));
+plot(velocity_patient.Time,velocity_patient.Data(:,2),...
+     velocity_desired.Time,velocity_desired.Data(:,2));
 xlabel('Time [s]');
 ylabel('Hand velocity [m/s]');
 legend('Actual','Desired');
 subplot(3,1,3);
-plot(t,true_tracking_error_mag);
+plot(true_tracking_error_mag);
 xlabel('Time [s]');
 ylabel('Error magnitude');
 
 % 2D trajectory plot
 figure;
-plot(position_patient.signals.values(:,1),...
-     position_patient.signals.values(:,2),...
-     position_desired.signals.values(:,1),...
-     position_desired.signals.values(:,2));
+plot(position_patient.Data(:,1),...
+     position_patient.Data(:,2),...
+     position_desired.Data(:,1),...
+     position_desired.Data(:,2));
 xlabel('X position [m]');
 ylabel('Y position [m]');
 legend('Actual','Desired');
 
 % Force plot
+f_th_d_mag = calc_timeseries_magnitude(f_th_d);
+f_mod_mag = calc_timeseries_magnitude(f_mod);
+f_a_mag = calc_timeseries_magnitude(f_a);
+f_g_mag = calc_timeseries_magnitude(f_g);
 figure;
 subplot(2,1,1);
-plot(f_th_d.time,sqrt(sum(f_th_d.signals.values.^2,2)),...
-     f_mod.time,sqrt(sum(f_mod.signals.values.^2,2)));
+plot(f_th_d_mag.Time,f_th_d_mag.Data,...
+     f_mod_mag.Time,f_mod_mag.Data);
 xlabel('Time [s]')
 ylabel('Force magn. [N]')
 legend('Therapist','Modified');
 subplot(2,1,2);
-plot(f_a.time,sqrt(sum(f_a.signals.values.^2,2)),...
-     f_g.time,sqrt(sum(f_g.signals.values.^2,2)));
+plot(f_a_mag.Time,f_a_mag.Data,...
+     f_g_mag.Time,f_g_mag.Data);
 xlabel('Time [s]');
 ylabel('Force magn. [N]');
 legend('Assistance','Guidance');
 
 % Velocity magnitude
+velocity_patient_mag = calc_timeseries_magnitude(velocity_patient);
 figure;
-plot(velocity_patient.time,sqrt(sum(velocity_patient.signals.values.^2,2)))
+plot(velocity_patient_mag.Time,velocity_patient_mag.Data)
 xlabel('Time [s]');
 ylabel('Velocity magn. [m/s]');
