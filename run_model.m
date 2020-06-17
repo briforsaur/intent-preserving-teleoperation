@@ -17,27 +17,3 @@ cd(start_dir)
 % Saving all simulation inputs and outputs, except the directory strings
 save(strcat(output_dir, data_dir, datestr(now,30), "_", model_name),...
      '-regexp', '^(?!(model_dir|output_data_dir|start_dir|tout)$).');
-
-function update_model_workspace(model_name, script_path)
-    if ~bdIsLoaded(model_name)
-        load_system(model_name);
-    end
-    mdlWorkspace = get_param(model_name,'ModelWorkspace');
-    if ~strcmp(mdlWorkspace.DataSource, 'MATLAB File')
-        mdlWorkspace.DataSource = 'MATLAB File';
-    end
-    if ~strcmp(mdlWorkspace.FileName, script_path)
-        mdlWorkspace.FileName = script_path;
-    end
-    reload(mdlWorkspace);
-    save_system(model_name);
-end
-
-function mdlWorkspaceVars = get_model_workspace(model_name)
-    mdlWorkspace = get_param(model_name,'ModelWorkspace');
-    var_list = whos(mdlWorkspace);
-    for i = 1:length(var_list)
-        var_name = var_list(i).name;
-        mdlWorkspaceVars.(var_name) = getVariable(mdlWorkspace, var_name);
-    end
-end
