@@ -1,0 +1,7 @@
+animations/
+figures/
+idea_testing/
+output_data/
+*.asv
+*.slxc
+*/slprj/
