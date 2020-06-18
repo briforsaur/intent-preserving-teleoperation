@@ -3,7 +3,7 @@
 close all;
 clear;
 data_dir = "E:/Users/shfor/OneDrive - Queen's University/sim_data_and_outputs/intent_preserving_teleop/output_data/";
-data_file = "20200617T154326_teleop_sim_angle";
+data_file = "20200618T145157_teleop_sim_angle";
 load(strcat(data_dir, data_file));
 
 error_pos = position_patient - position_desired;
@@ -57,21 +57,12 @@ legend('Actual','Desired');
 % Force plot
 f_th_d_mag = calc_timeseries_magnitude(f_th_d);
 f_mod_mag = calc_timeseries_magnitude(f_mod);
-f_a_mag = calc_timeseries_magnitude(f_a);
-f_g_mag = calc_timeseries_magnitude(f_g);
 figure;
-subplot(2,1,1);
 plot(f_th_d_mag.Time,f_th_d_mag.Data,...
      f_mod_mag.Time,f_mod_mag.Data);
 xlabel('Time [s]')
 ylabel('Force magn. [N]')
 legend('Therapist','Modified');
-subplot(2,1,2);
-plot(f_a_mag.Time,f_a_mag.Data,...
-     f_g_mag.Time,f_g_mag.Data);
-xlabel('Time [s]');
-ylabel('Force magn. [N]');
-legend('Assistance','Guidance');
 
 % Velocity magnitude
 velocity_patient_mag = calc_timeseries_magnitude(velocity_patient);
