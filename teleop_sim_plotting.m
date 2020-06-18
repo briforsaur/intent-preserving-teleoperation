@@ -1,9 +1,9 @@
 % teleop_sim_plotting.m
 
-close all;
+%close all;
 clear;
 data_dir = "E:/Users/shfor/OneDrive - Queen's University/sim_data_and_outputs/intent_preserving_teleop/output_data/";
-data_file = "20200618T145157_teleop_sim_angle";
+data_file = "2020-06-18_intent_preserving_teleop_sim_RIPT_T30";
 load(strcat(data_dir, data_file));
 
 error_pos = position_patient - position_desired;
@@ -64,9 +64,18 @@ xlabel('Time [s]')
 ylabel('Force magn. [N]')
 legend('Therapist','Modified');
 
-% Velocity magnitude
-velocity_patient_mag = calc_timeseries_magnitude(velocity_patient);
-figure;
-plot(velocity_patient_mag.Time,velocity_patient_mag.Data)
-xlabel('Time [s]');
-ylabel('Velocity magn. [m/s]');
+% % Velocity magnitude
+% velocity_patient_mag = calc_timeseries_magnitude(velocity_patient);
+% figure;
+% plot(velocity_patient_mag.Time,velocity_patient_mag.Data)
+% xlabel('Time [s]');
+% ylabel('Velocity magn. [m/s]');
+
+if decode_type == 1
+% Velocity rotation angle
+    figure;
+    plot(theta_v);
+    xlabel('Time [s]');
+    ylabel('Angle [rad]');
+    title('Relative velocity angle, theta_v');
+end
