@@ -7,7 +7,7 @@ data_dir = "output_data/";
 model_name = 'intent_preserving_teleop_sim';
 setup_script = "intent_preserving_teleop_setup.m";
 % Selecting the type of IPT decoding that will be used - default is no IPT
-decode_type = 0;
+decode_type = 1;
 rotationIPT = Simulink.Variant('decode_type == 1');
 % Updating the model workspace and adding it to the base workspace as a
 % structure for debugging and saving
