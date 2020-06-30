@@ -6,8 +6,8 @@ t_max = 20; % Total simulation runtime
 Ts = dt; % Discrete-time sample duration
 epsilon = 0.0001; % Maximum magnitude to treat normalized vectors as zero
 % Patient parameters
-m = 0.5;
-b = 0.1;
+m = 1;
+b = 8;
 x_0 = [0; 0; 0];
 v_0 = [0; 0; 0];
 % Therapist tracking parameters
@@ -33,3 +33,7 @@ T_max = 0.5;
 % Tolerances
 v_tol = 0.001; % [m/s]
 theta_tol = deg2rad(0.1); % [rad]
+% M-TDPC Parameters
+Gamma_w = 1;%0.7;
+xi_r = 0;%1.05;
+xi_p = b;
