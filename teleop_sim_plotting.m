@@ -3,7 +3,7 @@
 close all;
 clear;
 data_dir = "E:/Users/shfor/OneDrive - Queen's University/sim_data_and_outputs/intent_preserving_teleop/output_data/";
-data_file = "2020-07-14_intent_preserving_teleop_sim_RIPT_T30";
+data_file = "2020-07-14_ipt-sim_none_no-PC_T105";
 load(strcat(data_dir, data_file));
 
 error_pos = position_patient - position_desired;
@@ -56,15 +56,15 @@ legend('Actual','Desired');
 axis equal;
 axis(1.2*max(wrkspcVars.A_v)*[-1 1 -1 1]);
 
-% Force plot
-f_th_d_mag = calc_timeseries_magnitude(f_th_d);
-f_mod_mag = calc_timeseries_magnitude(f_mod);
-figure;
-plot(f_th_d_mag.Time,f_th_d_mag.Data,...
-     f_mod_mag.Time,f_mod_mag.Data);
-xlabel('Time [s]')
-ylabel('Force magn. [N]')
-legend('Therapist','Modified');
+% % Force plot
+% f_th_d_mag = calc_timeseries_magnitude(f_th_d);
+% f_mod_mag = calc_timeseries_magnitude(f_mod);
+% figure;
+% plot(f_th_d_mag.Time,f_th_d_mag.Data,...
+%      f_mod_mag.Time,f_mod_mag.Data);
+% xlabel('Time [s]')
+% ylabel('Force magn. [N]')
+% legend('Therapist','Modified');
 
 % % Velocity magnitude
 % velocity_patient_mag = calc_timeseries_magnitude(velocity_patient);
@@ -80,4 +80,12 @@ if decode_type == 1
     xlabel('Time [s]');
     ylabel('Angle [rad]');
     title('Relative velocity angle, theta_v');
+end
+if passivity_control_type == 1
+% LOP integration
+    figure;
+    plot(LOP_p);
+    xlabel('Time [s]');
+    ylabel('LOP');
+    title('Patient Lack-of-Passivity');
 end

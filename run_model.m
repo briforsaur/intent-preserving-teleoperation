@@ -8,7 +8,7 @@ base_data_name = 'ipt-sim';
 model_name = 'intent_preserving_teleop_sim';
 setup_script = "intent_preserving_teleop_setup.m";
 % Selecting the type of IPT decoding that will be used - default is no IPT
-decode_type = 1;
+decode_type = 0;
 rotationIPT = Simulink.Variant('decode_type == 1');
 % Selecting the type of passvitiy controller on the patient side, default is none
 passivity_control_type = 0;
