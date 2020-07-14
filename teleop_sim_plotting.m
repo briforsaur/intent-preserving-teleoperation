@@ -53,6 +53,8 @@ plot(position_patient.Data(:,1),...
 xlabel('X position [m]');
 ylabel('Y position [m]');
 legend('Actual','Desired');
+axis equal;
+axis(1.2*max(wrkspcVars.A_v)*[-1 1 -1 1]);
 
 % Force plot
 f_th_d_mag = calc_timeseries_magnitude(f_th_d);
