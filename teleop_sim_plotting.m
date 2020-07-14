@@ -1,9 +1,9 @@
 % teleop_sim_plotting.m
 
-%close all;
+close all;
 clear;
 data_dir = "E:/Users/shfor/OneDrive - Queen's University/sim_data_and_outputs/intent_preserving_teleop/output_data/";
-data_file = "2020-06-30_intent_preserving_teleop_sim_RIPT_T30";
+data_file = "2020-07-14_intent_preserving_teleop_sim_RIPT_T30";
 load(strcat(data_dir, data_file));
 
 error_pos = position_patient - position_desired;

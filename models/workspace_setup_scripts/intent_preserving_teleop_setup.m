@@ -22,7 +22,7 @@ k_d = 2*zeta*w_n*m - b;
 K_p = k_p*eye(3);
 K_d = k_d*eye(3);
 % Desired patient motion
-A_v = 0.12*[1; 1; 0];
+A_v = 0.12*[1; 0.8; 0];
 w_v = 2*pi*0.5;
 derivative_phases = [[0; pi/2; 0] [pi/2; pi; 0] [0; pi/2; 0]];
 % Communication channel parameters
@@ -37,3 +37,4 @@ theta_tol = deg2rad(0.1); % [rad]
 Gamma_w = 1;%0.7;
 xi_r = 0;%1.05;
 xi_p = b;
+LOP_0 = 0;
