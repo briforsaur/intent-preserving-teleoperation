@@ -11,7 +11,7 @@ setup_script = "intent_preserving_teleop_setup.m";
 decode_type = 1;
 rotationIPT = Simulink.Variant('decode_type == 1');
 % Selecting the type of passvitiy controller on the patient side, default is none
-passivity_control_type = 0;
+passivity_control_type = 1;
 mtdpc_patient = Simulink.Variant('passivity_control_type == 1');
 % Updating the model workspace and adding it to the base workspace as a
 % structure for debugging and saving

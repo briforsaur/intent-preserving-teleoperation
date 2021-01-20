@@ -3,7 +3,7 @@
 close all;
 clear;
 data_dir = "E:/Users/shfor/OneDrive - Queen's University/sim_data_and_outputs/intent_preserving_teleop/output_data/";
-data_file = "2020-07-14_ipt-sim_none_no-PC_T105";
+data_file = "2021-01-18_ipt-sim_RIPT_MTDPC_T50";
 load(strcat(data_dir, data_file));
 
 error_pos = position_patient - position_desired;

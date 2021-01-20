@@ -27,7 +27,7 @@ w_v = 2*pi*0.5;
 derivative_phases = [[0; pi/2; 0] [pi/2; pi; 0] [0; pi/2; 0]];
 % Communication channel parameters
 T_min = 0.01; 
-T = 0.105;
+T = 0.05;
 d_T = round(T/Ts); % Communication delay 
 T_max = 0.5;
 % Tolerances

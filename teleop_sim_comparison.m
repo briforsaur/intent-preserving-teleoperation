@@ -42,3 +42,16 @@ for i = 1:length(d)
     saveas(h,fig_dir + fig_name + num2str(i)+".png");
 end
 hold off
+for i = [1,3]
+    plot(d{i}.LOP_p, line_specs{i});
+    hold on;
+    xlabel('Time [s]');
+    ylabel('LOP');
+    axis([0 10 0 inf]);
+    grid on;
+    legend(data_labels)
+    title('Lack of passivity comparison (Delay 30 ms)');
+    drawnow;
+end
+saveas(h,fig_dir + 'LOP_MTDPC_T30' + ".fig");
+saveas(h,fig_dir + 'LOP_MTDPC_T30' + ".png");
