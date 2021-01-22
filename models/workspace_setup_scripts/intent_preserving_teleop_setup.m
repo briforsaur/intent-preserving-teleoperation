@@ -1,16 +1,16 @@
 % MTDPC_test_setup.m
 
-% Simulation parameters
+%% Simulation parameters
 dt = 0.001; % Maximum simulation step
 t_max = 20; % Total simulation runtime
 Ts = dt; % Discrete-time sample duration
 epsilon = 0.0001; % Maximum magnitude to treat normalized vectors as zero
-% Patient parameters
+%% Patient parameters
 m = 1;
 b = 8;
 x_0 = [0; 0; 0];
 v_0 = [0; 0; 0];
-% Therapist tracking parameters
+%% Therapist tracking parameters
 f_0 = [0;0;0];
 Mp = 0.1; % Desired overshoot
 ts = 0.25; % Desired settling time [s]
@@ -21,20 +21,37 @@ k_p = m*w_n^2;
 k_d = 2*zeta*w_n*m - b;
 K_p = k_p*eye(3);
 K_d = k_d*eye(3);
-% Desired patient motion
-A_v = 0.12*[1; 0.8; 0];
-w_v = 2*pi*0.5;
-derivative_phases = [[0; pi/2; 0] [pi/2; pi; 0] [0; pi/2; 0]];
-% Communication channel parameters
+%% Desired patient motion
+% Desired reach position
+x_d = 0.3;
+[t,x_D,v_x,a_x] = generate_min_jerk_trajectory(x_0(1),x_d,t_max/2,dt);
+% Obstacle avoidance position
+y_d = 0.1;
+[~,y_D,v_y,a_y] = generate_min_jerk_trajectory(x_0(2),y_d,t_max/4,dt);
+y_D = [y_D, y_D(end-1:-1:1)];
+v_y = [v_y, -v_y(end-1:-1:1)];
+a_y = [a_y, a_y(end-1:-1:1)];
+% Planar motion
+z_D = zeros(size(x_D));
+% Total forward trajectory
+X = [x_D;y_D;z_D];
+V = [v_x;v_y;z_D];
+A = [a_x;a_y;z_D];
+% Return trajectory
+t = [t, t(2:end)+t(end)];
+X = [X,X(:,end-1:-1:1)];
+V = [V,-V(:,end-1:-1:1)];
+A = [A,A(:,end-1:-1:1)];
+%% Communication channel parameters
 T_min = 0.01; 
-T = 0.05;
+T = 0.1;
 d_T = round(T/Ts); % Communication delay 
 T_max = 0.5;
-% Tolerances
+%% Tolerances
 v_tol = 0.001; % [m/s]
 theta_tol = deg2rad(0.1); % [rad]
-% M-TDPC Parameters
+%% M-TDPC Parameters
 Gamma_w = 1;%0.7;
 xi_r = 0;%1.05;
 xi_p = b;
-LOP_0 = 0.5*m*max(A_v*w_v)^2;
+LOP_0 = 0.5*m*max(sum(V.^2,1));

@@ -3,7 +3,7 @@
 close all;
 clear;
 data_dir = "E:/Users/shfor/OneDrive - Queen's University/sim_data_and_outputs/intent_preserving_teleop/output_data/";
-data_file = "2021-01-18_ipt-sim_RIPT_MTDPC_T50";
+data_file = "2021-01-20_ipt-sim_RIPT_MTDPC_T50";
 load(strcat(data_dir, data_file));
 
 error_pos = position_patient - position_desired;
@@ -54,7 +54,7 @@ xlabel('X position [m]');
 ylabel('Y position [m]');
 legend('Actual','Desired');
 axis equal;
-axis(1.2*max(wrkspcVars.A_v)*[-1 1 -1 1]);
+axis(1.2*max(max(wrkspcVars.X))*[-0.05 0.95 -0.05 0.95]);
 
 % % Force plot
 % f_th_d_mag = calc_timeseries_magnitude(f_th_d);
@@ -73,7 +73,7 @@ axis(1.2*max(wrkspcVars.A_v)*[-1 1 -1 1]);
 % xlabel('Time [s]');
 % ylabel('Velocity magn. [m/s]');
 
-if decode_type == 1
+if decode_type >= 1
 % Velocity rotation angle
     figure;
     plot(theta_v);
