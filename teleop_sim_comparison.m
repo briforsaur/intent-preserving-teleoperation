@@ -4,15 +4,15 @@ clear;
 data_dir = "E:/Users/shfor/OneDrive - Queen's University/sim_data_and_outputs/intent_preserving_teleop/output_data/";
 fig_dir = "E:/Users/shfor/OneDrive - Queen's University/sim_data_and_outputs/intent_preserving_teleop/figures/";
 
-t_delay_str = "T100";
+t_delay_str = "T200";
 IPT_str = ["none","sRIPT"];
 pc_type = "MTDPC";
 exp_config = [join([IPT_str(1),pc_type,t_delay_str],"_");
               join([IPT_str(2),pc_type,t_delay_str],"_")];
-date_str = "2021-01-20";
+date_str = "2021-01-25";
 data_files = [join([date_str,"ipt-sim",exp_config(1)],"_");
               join([date_str,"ipt-sim",exp_config(2)],"_")];
-data_labels = ["no-IPT+MTDPC",IPT_str+"+MTDPC"];
+data_labels = ["no-IPT+MTDPC",IPT_str(2)+"+MTDPC"];
 line_specs = {'-','-','-','-'};
 fig_name = "error-comp_" + exp_config(2);
 
@@ -56,3 +56,14 @@ for i = [1,2]
 end
 saveas(h,fig_dir + 'LOP-comp_' + exp_config(2) + ".fig");
 saveas(h,fig_dir + 'LOP-comp_' + exp_config(2) + ".png");
+
+figure;
+for i = 1:length(d)
+    plot(d{i}.alpha, line_specs{i})
+    hold on;
+end
+hold off
+xlabel('Time [s]');
+ylabel('Alpha (MTDPC Damping)');
+grid on;
+legend(data_labels)

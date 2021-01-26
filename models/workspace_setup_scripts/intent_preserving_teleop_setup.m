@@ -6,21 +6,27 @@ t_max = 20; % Total simulation runtime
 Ts = dt; % Discrete-time sample duration
 epsilon = 0.0001; % Maximum magnitude to treat normalized vectors as zero
 %% Patient parameters
+% Passive dynamics
 m = 1;
 b = 8;
 x_0 = [0; 0; 0];
 v_0 = [0; 0; 0];
-%% Therapist tracking parameters
-f_0 = [0;0;0];
+% Active dynamics
 Mp = 0.1; % Desired overshoot
-ts = 0.25; % Desired settling time [s]
+ts = 0.5; % Desired settling time [s]
 p_settle = 0.01; % Desired settling percent
 zeta = -log(Mp)/(pi*sqrt((log(Mp)/pi)^2 + 1));
 w_n = exp(p_settle)/(zeta*ts);
 k_p = m*w_n^2;
 k_d = 2*zeta*w_n*m - b;
-K_p = k_p*eye(3);
-K_d = k_d*eye(3);
+Kp_p = k_p*eye(3);
+Kp_d = k_d*eye(3);
+active_factor = 0.5;
+%% Therapist tracking parameters
+f_0 = [0;0;0];
+Kth_p = Kp_p;
+Kth_d = Kp_d;
+active_factor_th = 1 - active_factor;
 %% Desired patient motion
 % Desired reach position
 x_d = 0.3;
@@ -44,14 +50,14 @@ V = [V,-V(:,end-1:-1:1)];
 A = [A,A(:,end-1:-1:1)];
 %% Communication channel parameters
 T_min = 0.01; 
-T = 0.1;
+T = 200*Ts;
 d_T = round(T/Ts); % Communication delay 
 T_max = 0.5;
 %% Tolerances
 v_tol = 0.001; % [m/s]
 theta_tol = deg2rad(0.1); % [rad]
 %% M-TDPC Parameters
-Gamma_w = 1;%0.7;
+Gamma_w = 0.95;%0.7;
 xi_r = 0;%1.05;
 xi_p = b;
-LOP_0 = 0.5*m*max(sum(V.^2,1));
+LOP_0 = 0;%0.5*m*max(sum(V.^2,1));
