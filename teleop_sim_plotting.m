@@ -3,7 +3,7 @@
 close all;
 clear;
 data_dir = "E:/Users/shfor/OneDrive - Queen's University/sim_data_and_outputs/intent_preserving_teleop/output_data/";
-data_file = "2021-01-25_ipt-sim_sRIPT_MTDPC_T200";
+data_file = "2021-01-26_ipt-sim_none_no-PC_T200";
 load(strcat(data_dir, data_file));
 
 error_pos = position_patient - position_desired;
@@ -56,15 +56,15 @@ legend('Actual','Desired');
 axis equal;
 axis(1.2*max(max(wrkspcVars.X))*[-0.05 0.95 -0.05 0.95]);
 
-% % Force plot
-% f_th_d_mag = calc_timeseries_magnitude(f_th_d);
-% f_mod_mag = calc_timeseries_magnitude(f_mod);
-% figure;
-% plot(f_th_d_mag.Time,f_th_d_mag.Data,...
-%      f_mod_mag.Time,f_mod_mag.Data);
-% xlabel('Time [s]')
-% ylabel('Force magn. [N]')
-% legend('Therapist','Modified');
+% Force plot
+f_th_d_mag = calc_timeseries_magnitude(f_th_d);
+f_mod_mag = calc_timeseries_magnitude(f_mod);
+figure;
+plot(f_th_d_mag.Time,f_th_d_mag.Data,...
+     f_mod_mag.Time,f_mod_mag.Data);
+xlabel('Time [s]')
+ylabel('Force magn. [N]')
+legend('Therapist','Modified');
 
 % % Velocity magnitude
 % velocity_patient_mag = calc_timeseries_magnitude(velocity_patient);
@@ -72,6 +72,19 @@ axis(1.2*max(max(wrkspcVars.X))*[-0.05 0.95 -0.05 0.95]);
 % plot(velocity_patient_mag.Time,velocity_patient_mag.Data)
 % xlabel('Time [s]');
 % ylabel('Velocity magn. [m/s]');
+
+% Rotational Impact Plots
+v_p = velocity_patient;
+v_p_d = velocity_patient_d;
+assist_change_norm = calc_norm_assist_change(f_th_d,v_p,v_p_d);
+assist_change_sign = sign_timeseries(dot_product_timeseries(f_th_d,v_p_d)*dot_product_timeseries(f_th_d,v_p));
+
+figure;
+plot(assist_change_norm.Time,assist_change_norm.Data)
+hold on;
+plot(assist_change_sign)
+xlabel('Time [s]');
+ylabel('Normalized change in assistance [N/N]')
 
 if decode_type >= 1
 % Velocity rotation angle
@@ -88,4 +101,12 @@ if passivity_control_type == 1
     xlabel('Time [s]');
     ylabel('LOP');
     title('Patient Lack-of-Passivity');
+end
+
+function assist_change_norm = calc_norm_assist_change(f,v_p,v_p_d)
+    v_p_mag = calc_timeseries_magnitude(v_p);
+    v_p_d_mag = calc_timeseries_magnitude(v_p_d);
+    f_mag = calc_timeseries_magnitude(f);
+    assistance_change = dot_product_timeseries(f,v_p./v_p_mag - v_p_d./v_p_d_mag);
+    assist_change_norm = assistance_change./f_mag;
 end
