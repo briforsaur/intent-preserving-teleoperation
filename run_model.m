@@ -4,11 +4,11 @@ save_output = true;
 % Defining file names and directories
 output_dir = "E:/Users/shfor/OneDrive - Queen's University/sim_data_and_outputs/intent_preserving_teleop/";
 data_dir = "output_data/";
-base_data_name = 'ipt-sim';
-model_name = 'intent_preserving_teleop_sim';
-setup_script = "intent_preserving_teleop_setup.m";
+base_data_name = 'ipt-v-sim';
+model_name = 'ipt_velocity_sim';
+setup_script = "ipt_velocity_setup.m";
 % Selecting the type of IPT decoding that will be used - default is no IPT
-decode_type = 0;
+decode_type = 2;
 rotationIPT = Simulink.Variant('decode_type == 1');
 scaledRIPT = Simulink.Variant('decode_type == 2');
 % Selecting the type of passvitiy controller on the patient side, default is none
