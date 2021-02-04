@@ -3,7 +3,7 @@
 close all;
 clear;
 data_dir = "E:/Users/shfor/OneDrive - Queen's University/sim_data_and_outputs/intent_preserving_teleop/output_data/";
-data_file = "2021-02-01_ipt-vy-sim_none_no-PC_T200";
+data_file = "2021-01-28_ipt-vy-sim_none_no-PC_T200";
 load(strcat(data_dir, data_file));
 
 error_vel = velocity_patient - velocity_desired;
