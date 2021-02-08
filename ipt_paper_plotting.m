@@ -80,6 +80,11 @@ h_C(2).Name = "Comparison - Assistance change";
 labels = {'No IPT','RIPT','sRIPT'};
 datasets = {NI_data, RIPT_data, sRIPT_data};
 plot_force_change_comp(datasets, labels)
+title('Change in Assistance Relative to Intended Assistance');
+xlabel('Time [s]')
+ylabel('Relative Assitance Change [N/N]')
+axis([-inf inf -2 6]);
+legend(labels)
 % Assistance force
 h_C(3) = figure;
 h_C(3).Name = "Comparison - Assistance";
@@ -93,9 +98,6 @@ title('');
 xlabel('Time [s]');
 ylabel('Assistive force [N]');
 legend(labels)
-
-fa_change_rel = calc_norm_assist_change2(...
-    f_mod, f_d, v_p, v_p_d)
 %% Function definitions
 function plot_velocity_components(v_p,v_d,dims)
     labels = 'XYZ';
@@ -139,41 +141,25 @@ function plot_force_change(f_mod, f_th_d, v_p, v_p_d)
 end
 
 function plot_force_change_comp(datasets, labels)
-    h(1) = subplot(2,1,1);
-    h(2) = subplot(2,1,2);
-    titles = ["Ratio of actual to intended assistance",...
-              "Assistance change relative to total force"];
     for i = 1:length(datasets)
-        [fa_change_rel_total, fa_rel_intent] = calc_norm_assist_change(...
+        fa_change_rel = calc_norm_assist_change2(...
             datasets{i}.f_mod,...
             datasets{i}.f_th_d,...
             datasets{i}.velocity_patient,...
             datasets{i}.velocity_patient_d);
-        subplot(2,1,1);
-        plot(fa_change_rel_total)
-        hold on;
-        grid on;
-        subplot(2,1,2);
-        plot(fa_rel_intent);
+        plot(fa_change_rel)
         hold on;
         grid on;
     end
-    for i = 1:2
-        legend(h(i),labels);
-        xlabel(h(i),'Time [s]');
-        ylabel(h(i),'Relative change [N/N]')
-        title(h(i),titles(i));
-    end
-    axis(h(2),[-inf, inf, -6, 6]);
 end
 
 function fa_change_rel = calc_norm_assist_change2(...
     f_mod, f_d, v_p, v_p_d)
     v_p_mag = calc_timeseries_magnitude(v_p);
     v_p_d_mag = calc_timeseries_magnitude(v_p_d);
-    f_mag = calc_timeseries_magnitude(f_d);
     fa_intent = dot_product_timeseries(f_d, v_p_d./v_p_d_mag);
     fa_actual = dot_product_timeseries(f_mod, v_p./v_p_mag);
-    assistance_change = fa_actual - fa_intent;
-    fa_change_rel = assistance_change./f_mag;
+    abs_fa_intent = timeseries(abs(fa_intent.Data),fa_intent.Time);
+    %assistance_change = fa_actual - fa_intent;
+    fa_change_rel = fa_actual./abs_fa_intent;
 end
