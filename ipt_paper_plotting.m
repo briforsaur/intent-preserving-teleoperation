@@ -93,6 +93,9 @@ title('');
 xlabel('Time [s]');
 ylabel('Assistive force [N]');
 legend(labels)
+
+fa_change_rel = calc_norm_assist_change2(...
+    f_mod, f_d, v_p, v_p_d)
 %% Function definitions
 function plot_velocity_components(v_p,v_d,dims)
     labels = 'XYZ';
@@ -125,7 +128,7 @@ function plot_force_change(f_mod, f_th_d, v_p, v_p_d)
     plot(fa_change_rel_total,'k-')
     xlabel('Time [s]');
     ylabel('Relative change [N/N]')
-    title('Assistance change relative to total force');
+    title('Assistance change relative to Intended assistance');
     grid on;
     subplot(2,1,2);
     plot(fa_rel_intent,'k-');
@@ -162,4 +165,15 @@ function plot_force_change_comp(datasets, labels)
         title(h(i),titles(i));
     end
     axis(h(2),[-inf, inf, -6, 6]);
+end
+
+function fa_change_rel = calc_norm_assist_change2(...
+    f_mod, f_d, v_p, v_p_d)
+    v_p_mag = calc_timeseries_magnitude(v_p);
+    v_p_d_mag = calc_timeseries_magnitude(v_p_d);
+    f_mag = calc_timeseries_magnitude(f_d);
+    fa_intent = dot_product_timeseries(f_d, v_p_d./v_p_d_mag);
+    fa_actual = dot_product_timeseries(f_mod, v_p./v_p_mag);
+    assistance_change = fa_actual - fa_intent;
+    fa_change_rel = assistance_change./f_mag;
 end
