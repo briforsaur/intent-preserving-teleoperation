@@ -79,11 +79,15 @@ h_C(2) = figure;
 h_C(2).Name = "Comparison - Assistance change";
 labels = {'No IPT','RIPT','sRIPT'};
 datasets = {NI_data, RIPT_data, sRIPT_data};
-plot_force_change_comp(datasets, labels)
+plot_force_change_comp(datasets)
 title('Change in Assistance Relative to Intended Assistance');
 xlabel('Time [s]')
-ylabel('Relative Assitance Change [N/N]')
-axis([-inf inf -2 6]);
+ylabel('Relative Assitance Change')
+% Highlighted regions
+fill([0,0;0,0;20,20;20,20],[0,-2;1,-3;1,-3;0,-2],'g','FaceAlpha',0.1,'EdgeColor','none')
+fill([0,0,0;0,0,0;20,20,20;20,20,20],[0,-3,1;-2,-4,2;-2,-4,2;0,-3,1],'y','FaceAlpha',0.1,'EdgeColor','none')
+fill([0;0;20;20],[2;4;4;2],'r','FaceAlpha',0.1,'EdgeColor','none')
+%axis([-inf inf -2 6]);
 legend(labels)
 % Assistance force
 h_C(3) = figure;
@@ -112,54 +116,34 @@ function plot_velocity_components(v_p,v_d,dims)
         grid on;
     end
 end
-function [fa_change_rel_total, fa_rel_intent] = calc_norm_assist_change(...
-        f_mod, f_d, v_p, v_p_d)
-    v_p_mag = calc_timeseries_magnitude(v_p);
-    v_p_d_mag = calc_timeseries_magnitude(v_p_d);
-    f_mag = calc_timeseries_magnitude(f_d);
-    fa_intent = dot_product_timeseries(f_d, v_p_d./v_p_d_mag);
-    fa_actual = dot_product_timeseries(f_mod, v_p./v_p_mag);
-    assistance_change = fa_actual - fa_intent;
-    fa_change_rel_total = assistance_change./f_mag;
-    fa_rel_intent = fa_actual/fa_intent;
-end
+
 function plot_force_change(f_mod, f_th_d, v_p, v_p_d)
-    [fa_change_rel_total, fa_rel_intent] = calc_norm_assist_change(...
-        f_mod, f_th_d, v_p, v_p_d);
-    subplot(2,1,1);
-    plot(fa_change_rel_total,'k-')
+    fa_change_angle = assistance_change(f_mod, f_th_d, v_p, v_p_d);
+    plot(fa_change_angle,'k-')
     xlabel('Time [s]');
-    ylabel('Relative change [N/N]')
+    ylabel('Relative Assistance')
     title('Assistance change relative to Intended assistance');
-    grid on;
-    subplot(2,1,2);
-    plot(fa_rel_intent,'k-');
-    xlabel('Time [s]');
-    ylabel('Relative change [N/N]')
-    title('Actual assistance relative to Intended assistance')
-    grid on;
 end
 
-function plot_force_change_comp(datasets, labels)
+function plot_force_change_comp(datasets)
     for i = 1:length(datasets)
-        fa_change_rel = calc_norm_assist_change2(...
+        fa_change_angle = assistance_change(...
             datasets{i}.f_mod,...
             datasets{i}.f_th_d,...
             datasets{i}.velocity_patient,...
             datasets{i}.velocity_patient_d);
-        plot(fa_change_rel)
+        plot(fa_change_angle)
         hold on;
         grid on;
     end
 end
 
-function fa_change_rel = calc_norm_assist_change2(...
-    f_mod, f_d, v_p, v_p_d)
+function fa_change_angle = assistance_change(f_mod, f_d, v_p, v_p_d)
     v_p_mag = calc_timeseries_magnitude(v_p);
     v_p_d_mag = calc_timeseries_magnitude(v_p_d);
     fa_intent = dot_product_timeseries(f_d, v_p_d./v_p_d_mag);
     fa_actual = dot_product_timeseries(f_mod, v_p./v_p_mag);
-    abs_fa_intent = timeseries(abs(fa_intent.Data),fa_intent.Time);
-    %assistance_change = fa_actual - fa_intent;
-    fa_change_rel = fa_actual./abs_fa_intent;
+    fa_change_angle = timeseries(atan2(fa_actual.Data,fa_intent.Data),...
+                                 fa_actual.Time);
+    fa_change_angle = fa_change_angle/(pi/4);
 end
