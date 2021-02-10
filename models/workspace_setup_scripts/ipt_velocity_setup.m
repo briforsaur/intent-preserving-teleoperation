@@ -24,7 +24,7 @@ active_factor = 0.5;
 %% Therapist tracking parameters
 f_0 = [0;0;0];
 Kth_d = Kp_d;
-active_factor_th = 0;%1 - active_factor;
+active_factor_th = 1 - active_factor;
 %% Desired patient motion
 load(trajectory_dir+trajectory_file);
 %% Communication channel parameters

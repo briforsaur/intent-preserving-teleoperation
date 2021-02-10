@@ -9,7 +9,7 @@ single_col_width = 245; % pt
 double_col_width = 505; % pt
 
 %% No assistance plots
-NA_file = "2021-02-01_ipt-vy-sim_none_no-PC_T200_no_assistance";
+NA_file = "2021-02-08_ipt-vy-sim_none_no-PC_T200_no_assistance";
 NA_data = load(strcat(data_dir, NA_file));
 h_NA = figure;
 h_NA.Name = "No Assistance - Velocity";
@@ -17,7 +17,7 @@ plot_velocity_components(NA_data.velocity_patient,...
                          NA_data.velocity_desired,...
                          [1 2]);
 %% No IPT plots
-NI_file = "2021-01-28_ipt-vy-sim_none_no-PC_T200";
+NI_file = "2021-02-08_ipt-vy-sim_none_no-PC_T200";
 NI_data = load(strcat(data_dir, NI_file));
 % Velocity plot
 h_NI = figure;
@@ -25,15 +25,8 @@ h_NI.Name = "No IPT - Velocity";
 plot_velocity_components(NI_data.velocity_patient,...
                          NI_data.velocity_desired,...
                          [1 2]);
-% Force change plot
-h_NI(2) = figure;
-h_NI(2).Name = "No IPT - Assistance change";
-plot_force_change(NI_data.f_mod,...
-                  NI_data.f_th_d,...
-                  NI_data.velocity_patient,...
-                  NI_data.velocity_patient_d);
 %% RIPT plots
-RIPT_file = "2021-01-28_ipt-vy-sim_RIPT_no-PC_T200";
+RIPT_file = "2021-02-08_ipt-vy-sim_RIPT_no-PC_T200";
 RIPT_data = load(strcat(data_dir, RIPT_file));
 h_RIPT = figure;
 h_RIPT.Name = "RIPT - Velocity";
@@ -41,7 +34,7 @@ plot_velocity_components(RIPT_data.velocity_patient,...
                                   RIPT_data.velocity_desired,...
                                   [1 2]);
 %% sRIPT plots
-sRIPT_file = "2021-01-28_ipt-vy-sim_sRIPT_no-PC_T200";
+sRIPT_file = "2021-02-08_ipt-vy-sim_sRIPT_no-PC_T200";
 sRIPT_data = load(strcat(data_dir, sRIPT_file));
 % Velocity
 h_sRIPT = figure;
@@ -49,13 +42,6 @@ h_sRIPT.Name = "sRIPT - Velocity";
 plot_velocity_components(sRIPT_data.velocity_patient,...
                                    sRIPT_data.velocity_desired,...
                                    [1 2]);
-% Assistance force changes
-h_sRIPT(2) = figure;
-h_sRIPT(2).Name = "No sRIPT - Assistance change";
-plot_force_change(sRIPT_data.f_mod,...
-                  sRIPT_data.f_th_d,...
-                  sRIPT_data.velocity_patient,...
-                  sRIPT_data.velocity_patient_d);
 %% Comparison plots
 
 % Velocity magnitude comparison
@@ -79,6 +65,7 @@ h_C(2) = figure;
 h_C(2).Name = "Comparison - Assistance change";
 labels = {'No IPT','RIPT','sRIPT'};
 datasets = {NI_data, RIPT_data, sRIPT_data};
+subplot(2,1,1)
 plot_force_change_comp(datasets)
 title('Change in Assistance Relative to Intended Assistance');
 xlabel('Time [s]')
@@ -89,9 +76,7 @@ fill([0,0,0;0,0,0;20,20,20;20,20,20],[0,-3,1;-2,-4,2;-2,-4,2;0,-3,1],'y','FaceAl
 fill([0;0;20;20],[2;4;4;2],'r','FaceAlpha',0.1,'EdgeColor','none')
 %axis([-inf inf -2 6]);
 legend(labels)
-% Assistance force
-h_C(3) = figure;
-h_C(3).Name = "Comparison - Assistance";
+subplot(2,1,2)
 for i = 1:length(datasets)
     plot(dot_product_timeseries(datasets{i}.f_mod,...
                                 datasets{i}.velocity_patient));
@@ -100,7 +85,8 @@ end
 hold off;
 title('');
 xlabel('Time [s]');
-ylabel('Assistive force [N]');
+ylabel('Power [W]');
+grid on;
 legend(labels)
 %% Function definitions
 function plot_velocity_components(v_p,v_d,dims)
