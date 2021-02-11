@@ -9,7 +9,7 @@ single_col_width = 245; % pt
 double_col_width = 505; % pt
 
 %% No assistance plots
-NA_file = "2021-02-08_ipt-vy-sim_none_no-PC_T200_no_assistance";
+NA_file = "2021-02-11_ipt-circle-sim_none_no-PC_T200_no_assistance";%"2021-02-08_ipt-vy-sim_none_no-PC_T200_no_assistance";
 NA_data = load(strcat(data_dir, NA_file));
 h_NA = figure;
 h_NA.Name = "No Assistance - Velocity";
@@ -17,7 +17,7 @@ plot_velocity_components(NA_data.velocity_patient,...
                          NA_data.velocity_desired,...
                          [1 2]);
 %% No IPT plots
-NI_file = "2021-02-08_ipt-vy-sim_none_no-PC_T200";
+NI_file = "2021-02-11_ipt-circle-sim_none_no-PC_T200";%"2021-02-08_ipt-vy-sim_none_no-PC_T200";
 NI_data = load(strcat(data_dir, NI_file));
 % Velocity plot
 h_NI = figure;
@@ -26,7 +26,7 @@ plot_velocity_components(NI_data.velocity_patient,...
                          NI_data.velocity_desired,...
                          [1 2]);
 %% RIPT plots
-RIPT_file = "2021-02-08_ipt-vy-sim_RIPT_no-PC_T200";
+RIPT_file = "2021-02-11_ipt-circle-sim_RIPT_no-PC_T200";%"2021-02-08_ipt-vy-sim_RIPT_no-PC_T200";
 RIPT_data = load(strcat(data_dir, RIPT_file));
 h_RIPT = figure;
 h_RIPT.Name = "RIPT - Velocity";
@@ -34,7 +34,7 @@ plot_velocity_components(RIPT_data.velocity_patient,...
                                   RIPT_data.velocity_desired,...
                                   [1 2]);
 %% sRIPT plots
-sRIPT_file = "2021-02-08_ipt-vy-sim_sRIPT_no-PC_T200";
+sRIPT_file = "2021-02-11_ipt-circle-sim_sRIPT_no-PC_T200";%"2021-02-08_ipt-vy-sim_sRIPT_no-PC_T200";
 sRIPT_data = load(strcat(data_dir, sRIPT_file));
 % Velocity
 h_sRIPT = figure;
